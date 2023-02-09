@@ -1,0 +1,19 @@
+{
+  "name": "google-dns",
+  "version": "0.1.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "node index.js",
+    "production": "NODE_ENV=production node index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@google-cloud/dns": "^3.0.2",
+    "dotenv": "^16.0.3",
+    "node-localstorage": "^2.2.1",
+    "public-ip": "^6.0.1"
+  }
+}
