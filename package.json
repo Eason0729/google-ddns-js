@@ -13,7 +13,6 @@
   "dependencies": {
     "@google-cloud/dns": "^3.0.2",
     "dotenv": "^16.0.3",
-    "node-localstorage": "^2.2.1",
     "pino": "^8.10.0",
     "pino-pretty": "^9.2.0",
     "public-ip": "^6.0.1"

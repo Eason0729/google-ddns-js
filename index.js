@@ -8,11 +8,11 @@ import pretty from 'pino-pretty'
 
 var logger;
 if (process.env.NODE_ENV !== 'production') {
-    logger=pino({ level: 'info' },pretty());
+    logger=pino({ level: 'trace' },pretty());
     console.log("using .env file")
     dotenv.config();
 }else{
-    logger=pino({ level: 'debug' },pretty());
+    logger=pino({ level: 'info' },pretty());
 }
 
 
@@ -29,28 +29,35 @@ domain_name: ${domain_name}
 ttl: ${ttl}
 detect_interval: ${detect_interval}`,);
 
-
-    let last_ipv4;
-    let last_ipv6;
-
-    async function check(){
-        logger.trace(`checking ip`);
-        let ipv4=await publicIpv4();
-        if (last_ipv4!=ipv4){
-            logger.debug(`ipv4 changed from ${last_ipv4} to ${ipv4}`);
-            await ddns_update("A",ipv4);
+    async function check_ipv4(){
+        let last_ipv4;
+        setInterval(async()=>{
+            logger.trace(`checking ipv4`);
+            let ipv4=await publicIpv4({onlyHttps:true});
+            if (last_ipv4!=ipv4){
+                logger.debug(`ipv4 changed from ${last_ipv4} to ${ipv4}`);
+                await ddns_update("A",ipv4);
+            }
+            last_ipv4=ipv4;
         }
-        last_ipv4=ipv4;
-
-        let ipv6=await publicIpv6();
-        if (last_ipv6!=ipv6){
-            logger.debug(`ipv4 changed from ${last_ipv4} to ${ipv4}`);
-            await ddns_update("AAAA",ipv6);
-        }
-        last_ipv6=ipv6;
+        ,detect_interval*1000
+        );
     }
-    setInterval(check,detect_interval*1000);
-    check();
+    async function check_ipv6(){
+        let last_ipv6;
+        setInterval(async()=>{
+            let ipv6=await publicIpv6({onlyHttps:true});
+            if (last_ipv6!=ipv6){
+                logger.debug(`ipv6 changed from ${last_ipv6} to ${ipv6}`);
+                await ddns_update("AAAA",ipv6);
+            }
+            last_ipv6=ipv6;
+        }
+        ,detect_interval*1000
+        );
+    }
+    check_ipv4();
+    check_ipv6();
 }
 
 async function ddns_update(record_type,expect_value){
