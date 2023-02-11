@@ -2,6 +2,7 @@ version: '3'
 
 services:
   ddns:
+    container_name: google-ddns
     restart: unless-stopped
     network_mode: "host"
     build: .

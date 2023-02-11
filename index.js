@@ -24,7 +24,7 @@ function main(){
 
     async function check(){
         let ipv4=await publicIpv4();
-        console.log(ipv4);
+//        console.log(ipv4);
         if (last_ipv4!=ipv4){
             await ddns_update("A",ipv4);
         }
