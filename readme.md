@@ -7,7 +7,7 @@ Dymanic dns for cloud dns(GCP)
 ```env
 GOOGLE_APPLICATION_CREDENTIALS=<service account token path> // require if not on gcp
 ZONE_NAME=<zone name>// require
-DOMAIN_NAME=<FDQN(trailing "." included)>// require
+DOMAIN_NAME=<FQDN(trailing "." included)>// require
 TTL=<number in second>// require
 DETECT_INTERVAL=<number in second>// default to 60sec
 IPV4="true"|"false"// default to "true"
